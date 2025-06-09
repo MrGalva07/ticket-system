@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { Ticket } from '../types/ticket';
 
-interface TicketModalProps {
+export interface TicketModalProps {
   ticket: Ticket;
   onClose: () => void;
   onEdit: (ticket: Ticket) => void;
@@ -27,7 +27,7 @@ const TicketModal: React.FC<TicketModalProps> = ({ ticket, onClose, onEdit, onAd
         <p><strong>Status:</strong> {ticket.status}</p>
         <p><strong>Criador:</strong> {ticket.criador}</p>
         <p><strong>Data de Criação:</strong> {ticket.dataCriacao}</p>
-        <p className="mt-2">{ticket.descricao}</p>
+        <p className="mt-2"><strong>Descrição:</strong>{ticket.descricao}</p>
 
         <h3 className="text-lg font-semibold mt-4">Comentários</h3>
         <ul className="list-disc list-inside mb-2 max-h-40 overflow-y-auto">

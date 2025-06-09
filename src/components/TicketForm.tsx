@@ -43,14 +43,15 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAdd }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6 space-y-4">
-      <div>
+    <form onSubmit={handleSubmit} className="mb-4 p-4 border border-gray-300 rounded space-y-4">
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div>
         <label className="block font-semibold">Título</label>
         <input
           name="titulo"
           value={form.titulo}
           onChange={handleChange}
-          className="border p-2 w-full"
+          className="border rounded p-2 w-full"
           required
         />
       </div>
@@ -60,7 +61,7 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAdd }) => {
           name="descricao"
           value={form.descricao}
           onChange={handleChange}
-          className="border p-2 w-full"
+          className="border rounded p-2 w-full"
           required
         />
       </div>
@@ -70,7 +71,7 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAdd }) => {
           name="criador"
           value={form.criador}
           onChange={handleChange}
-          className="border p-2 w-full"
+          className="border rounded p-2 w-full"
           required
         />
       </div>
@@ -81,7 +82,7 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAdd }) => {
           type="date"
           value={form.dataCriacao}
           onChange={handleChange}
-          className="border p-2 w-full"
+          className="border rounded p-2 w-full"
           required
         />
       </div>
@@ -91,7 +92,7 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAdd }) => {
           name="status"
           value={form.status}
           onChange={handleChange}
-          className="border p-2 w-full"
+          className="border rounded p-2 w-full"
         >
           <option value="aberto">Aberto</option>
           <option value="em progresso">Em Progresso</option>
@@ -101,6 +102,7 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAdd }) => {
       <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
         Criar Ticket
       </button>
+      </div>
     </form>
   );
 };

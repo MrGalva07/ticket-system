@@ -4,6 +4,7 @@ import TicketTable from '../components/TicketTable';
 import TicketModal from '../components/TicketModal';
 import { v4 as uuidv4 } from 'uuid';
 
+
 const Home = () => {
   const [tickets, setTickets] = useState<Ticket[]>([
     {
@@ -57,7 +58,7 @@ const Home = () => {
     setNewTicket(ticket);
     setIsFormVisible(true);
     setIsEditing(true);
-    setSelectedTicket(null); // fecha o modal ao abrir o formulário
+    setSelectedTicket(null);
   };
 
   const handleDeleteTicket = (id: string) => {
@@ -77,12 +78,13 @@ const Home = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const now = new Date().toISOString().split('T')[0];
+  const getHoje = () => new Date().toLocaleDateString('pt-BR');
+
 
     if (isEditing) {
       const updatedTickets = tickets.map((t) =>
         t.id === newTicket.id
-          ? { ...newTicket, ultimaAtualizacao: now }
+          ? { ...newTicket, ultimaAtualizacao: getHoje() }
           : t
       );
       setTickets(updatedTickets);
@@ -90,93 +92,88 @@ const Home = () => {
       const novoTicket = {
         ...newTicket,
         id: uuidv4(),
-        dataCriacao: now,
-        ultimaAtualizacao: now,
+        dataCriacao: getHoje(),
+        ultimaAtualizacao: getHoje(),
       };
       setTickets([...tickets, novoTicket]);
     }
 
     // Reset
-    setNewTicket({
-      id: '',
-      titulo: '',
-      status: 'aberto',
-      ultimaAtualizacao: '',
-      descricao: '',
-      criador: '',
-      dataCriacao: '',
-      comentarios: [],
-    });
+    setNewTicket(newTicket);
     setIsFormVisible(false);
     setIsEditing(false);
   };
 
   // Função para alterar status direto na tabela
   const handleChangeStatus = (id: string, novoStatus: 'aberto' | 'em progresso' | 'concluído') => {
-    const now = new Date().toISOString().split('T')[0];
+   const getHoje = () => new Date().toLocaleDateString('pt-BR');
     setTickets(prevTickets =>
       prevTickets.map(ticket =>
         ticket.id === id
-          ? { ...ticket, status: novoStatus, ultimaAtualizacao: now }
+          ? { ...ticket, status: novoStatus, ultimaAtualizacao: getHoje() }
           : ticket
       )
     );
   };
-const handleAddComment = (ticketId: string, comment: string) => {
-  const now = new Date().toISOString().split('T')[0];
-  setTickets(prev =>
-    prev.map(t =>
-      t.id === ticketId
-        ? {
+  const handleAddComment = (ticketId: string, comment: string) => {
+  const getHoje = () => new Date().toLocaleDateString('pt-BR');
+    setTickets(prev =>
+      prev.map(t =>
+        t.id === ticketId
+          ? {
             ...t,
             comentarios: [...t.comentarios, comment],
-            ultimaAtualizacao: now
+            ultimaAtualizacao: getHoje()
           }
-        : t
-    )
-  );
+          : t
+      )
+    );
 
-  // Atualiza o ticket selecionado
-  if (selectedTicket?.id === ticketId) {
-    setSelectedTicket(prev => prev && {
-      ...prev,
-      comentarios: [...prev.comentarios, comment],
-      ultimaAtualizacao: now
-    });
-  }
-};
+    // Atualiza o ticket selecionado
+    if (selectedTicket?.id === ticketId) {
+      setSelectedTicket(prev => prev && {
+        ...prev,
+        comentarios: [...prev.comentarios, comment],
+        ultimaAtualizacao: getHoje()
+      });
+    }
+  };
 
 
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Sistema de Tickets</h1>
+    <div className="px-4 py-6 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+
+      <h1 className="text-3xl font-bold mb-4 text-center ">-Sistema de Tickets-</h1>
 
       {/* Filtro de Status */}
-      <div className="mb-4">
-        <label htmlFor="filtroStatus" className="mr-2 font-semibold">Filtrar por status:</label>
-        <select
-          id="filtroStatus"
-          value={filtroStatus}
-          onChange={(e) => setFiltroStatus(e.target.value as any)}
-          className="border p-2 rounded"
-        >
-          <option value="todos">Todos</option>
-          <option value="aberto">Aberto</option>
-          <option value="em progresso">Em Progresso</option>
-          <option value="concluído">Concluído</option>
-        </select>
+      <div className="mb-4 flex justify-between">
+        <div>
+          {!isFormVisible && (
+            <button
+              onClick={() => setIsFormVisible(true)}
+              className="mb-4 px-4 py-2 bg-blue-600 text-white rounded"
+            >
+              Criar Novo Ticket
+            </button>
+          )}
+        </div>
+        <div>
+          <label htmlFor="filtroStatus" className="mr-2 font-semibold">Filtrar por status:</label>
+          <select
+            id="filtroStatus"
+            value={filtroStatus}
+            onChange={(e) => setFiltroStatus(e.target.value as any)}
+            className="border p-2 rounded"
+          >
+            <option value="todos">Todos</option>
+            <option value="aberto">Aberto</option>
+            <option value="em progresso">Em Progresso</option>
+            <option value="concluído">Concluído</option>
+          </select>
+        </div>
       </div>
 
-      {!isFormVisible && (
-        <button
-          onClick={() => setIsFormVisible(true)}
-          className="mb-4 px-4 py-2 bg-blue-600 text-white rounded"
-        >
-          Criar Novo Ticket
-        </button>
-      )}
-              
       {isFormVisible && (
         <form onSubmit={handleSubmit} className="mb-4 p-4 border border-gray-300 rounded">
           <div className="mb-2">
@@ -226,7 +223,7 @@ const handleAddComment = (ticketId: string, comment: string) => {
         tickets={ticketsFiltrados}
         onTicketClick={handleTicketClick}
         onDelete={handleDeleteTicket}
-        onChangeStatus={handleChangeStatus} // novo prop para alterar status
+        onChangeStatus={handleChangeStatus}
       />
 
       {selectedTicket && (
