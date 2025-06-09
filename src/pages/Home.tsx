@@ -4,7 +4,6 @@ import TicketTable from '../components/TicketTable';
 import TicketModal from '../components/TicketModal';
 import { v4 as uuidv4 } from 'uuid';
 
-
 const Home = () => {
   const [tickets, setTickets] = useState<Ticket[]>([
     {
@@ -29,45 +28,8 @@ const Home = () => {
     }
   ]);
 
-const [newTicket, setNewTicket] = useState<Ticket>({
-  id: '',
-  titulo: '',
-  status: 'aberto',
-  ultimaAtualizacao: '',
-  descricao: '',
-  criador: '',
-  dataCriacao: '',
-  comentarios: []
-});
-
-
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
-
-  const handleTicketClick = (ticket: Ticket) => {
-    setSelectedTicket(ticket);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setNewTicket((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-  const now = new Date().toISOString().split('T')[0];
-  const ticketCompletado = {
-    ...newTicket,
-    id: uuidv4(),  // gera ID único string
-    dataCriacao: now,
-    ultimaAtualizacao: now,
-  };
-  setTickets([...tickets, ticketCompletado]);
-  setNewTicket({
-    id: '',  
+  const [newTicket, setNewTicket] = useState<Ticket>({
+    id: '',
     titulo: '',
     status: 'aberto',
     ultimaAtualizacao: '',
@@ -76,18 +38,135 @@ const handleSubmit = (e: React.FormEvent) => {
     dataCriacao: '',
     comentarios: []
   });
-  setIsFormVisible(false);
-};
-const handleDeleteTicket = (id: string) => {
-  setTickets(prevTickets => prevTickets.filter(ticket => ticket.id !== id));
-    if (selectedTicket?.id === id) {
-    setSelectedTicket(null);
-  }
 
+  const [isFormVisible, setIsFormVisible] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Estado para o filtro de status:
+  const [filtroStatus, setFiltroStatus] = useState<'todos' | 'aberto' | 'em progresso' | 'concluído'>('todos');
+
+  // Filtra os tickets conforme filtroStatus:
+  const ticketsFiltrados = filtroStatus === 'todos' ? tickets : tickets.filter(t => t.status === filtroStatus);
+
+  const handleTicketClick = (ticket: Ticket) => {
+    setSelectedTicket(ticket);
+  };
+
+  const handleEdit = (ticket: Ticket) => {
+    setNewTicket(ticket);
+    setIsFormVisible(true);
+    setIsEditing(true);
+    setSelectedTicket(null); // fecha o modal ao abrir o formulário
+  };
+
+  const handleDeleteTicket = (id: string) => {
+    setTickets(prev => prev.filter(ticket => ticket.id !== id));
+    if (selectedTicket?.id === id) {
+      setSelectedTicket(null);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setNewTicket(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const now = new Date().toISOString().split('T')[0];
+
+    if (isEditing) {
+      const updatedTickets = tickets.map((t) =>
+        t.id === newTicket.id
+          ? { ...newTicket, ultimaAtualizacao: now }
+          : t
+      );
+      setTickets(updatedTickets);
+    } else {
+      const novoTicket = {
+        ...newTicket,
+        id: uuidv4(),
+        dataCriacao: now,
+        ultimaAtualizacao: now,
+      };
+      setTickets([...tickets, novoTicket]);
+    }
+
+    // Reset
+    setNewTicket({
+      id: '',
+      titulo: '',
+      status: 'aberto',
+      ultimaAtualizacao: '',
+      descricao: '',
+      criador: '',
+      dataCriacao: '',
+      comentarios: [],
+    });
+    setIsFormVisible(false);
+    setIsEditing(false);
+  };
+
+  // Função para alterar status direto na tabela
+  const handleChangeStatus = (id: string, novoStatus: 'aberto' | 'em progresso' | 'concluído') => {
+    const now = new Date().toISOString().split('T')[0];
+    setTickets(prevTickets =>
+      prevTickets.map(ticket =>
+        ticket.id === id
+          ? { ...ticket, status: novoStatus, ultimaAtualizacao: now }
+          : ticket
+      )
+    );
+  };
+const handleAddComment = (ticketId: string, comment: string) => {
+  const now = new Date().toISOString().split('T')[0];
+  setTickets(prev =>
+    prev.map(t =>
+      t.id === ticketId
+        ? {
+            ...t,
+            comentarios: [...t.comentarios, comment],
+            ultimaAtualizacao: now
+          }
+        : t
+    )
+  );
+
+  // Atualiza o ticket selecionado
+  if (selectedTicket?.id === ticketId) {
+    setSelectedTicket(prev => prev && {
+      ...prev,
+      comentarios: [...prev.comentarios, comment],
+      ultimaAtualizacao: now
+    });
+  }
 };
+
+
+
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Sistema de Tickets</h1>
+
+      {/* Filtro de Status */}
+      <div className="mb-4">
+        <label htmlFor="filtroStatus" className="mr-2 font-semibold">Filtrar por status:</label>
+        <select
+          id="filtroStatus"
+          value={filtroStatus}
+          onChange={(e) => setFiltroStatus(e.target.value as any)}
+          className="border p-2 rounded"
+        >
+          <option value="todos">Todos</option>
+          <option value="aberto">Aberto</option>
+          <option value="em progresso">Em Progresso</option>
+          <option value="concluído">Concluído</option>
+        </select>
+      </div>
 
       {!isFormVisible && (
         <button
@@ -97,7 +176,7 @@ const handleDeleteTicket = (id: string) => {
           Criar Novo Ticket
         </button>
       )}
-
+              
       {isFormVisible && (
         <form onSubmit={handleSubmit} className="mb-4 p-4 border border-gray-300 rounded">
           <div className="mb-2">
@@ -134,18 +213,30 @@ const handleDeleteTicket = (id: string) => {
           </div>
           <div className="flex gap-2 mt-4">
             <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">
-              Adicionar
+              {isEditing ? 'Salvar Edição' : 'Adicionar'}
             </button>
-            <button type="button" onClick={() => setIsFormVisible(false)} className="px-4 py-2 bg-red-600 text-white rounded">
+            <button type="button" onClick={() => { setIsFormVisible(false); setIsEditing(false); }} className="px-4 py-2 bg-red-600 text-white rounded">
               Cancelar
             </button>
           </div>
         </form>
       )}
 
-      <TicketTable tickets={tickets} onTicketClick={handleTicketClick} onDelete={handleDeleteTicket} />
+      <TicketTable
+        tickets={ticketsFiltrados}
+        onTicketClick={handleTicketClick}
+        onDelete={handleDeleteTicket}
+        onChangeStatus={handleChangeStatus} // novo prop para alterar status
+      />
+
       {selectedTicket && (
-        <TicketModal ticket={selectedTicket} onClose={() => setSelectedTicket(null)} />
+        <TicketModal
+          ticket={selectedTicket}
+          onClose={() => setSelectedTicket(null)}
+          onEdit={handleEdit}
+          onAddComment={handleAddComment}
+        />
+
       )}
     </div>
   );

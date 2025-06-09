@@ -1,7 +1,9 @@
+export type Status = 'aberto' | 'em progresso' | 'concluído';
+
 export interface Ticket {
   id: string;
   titulo: string;
-  status: 'aberto' | 'em progresso' | 'concluído';
+  status: Status;
   ultimaAtualizacao: string;
   descricao: string;
   criador: string;
