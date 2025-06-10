@@ -46,7 +46,7 @@ const TicketModal: React.FC<TicketModalProps> = ({ ticket, onClose, onEdit, onAd
           />
           <button
             onClick={adicionarComentario}
-            className="px-4 py-2 bg-blue-600 text-white rounded"
+            className="px-4 py-2 bg-blue-800 hover:bg-blue-700 text-white rounded text-sm transition-colors duration-200"
           >
             Adicionar
           </button>
@@ -55,7 +55,7 @@ const TicketModal: React.FC<TicketModalProps> = ({ ticket, onClose, onEdit, onAd
         <div className="mt-4 text-right">
           <button
             onClick={() => onEdit(ticket)}
-            className="px-4 py-2 bg-yellow-500 text-white rounded"
+            className="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-white rounded text-sm transition-colors duration-200"
           >
             Editar
           </button>

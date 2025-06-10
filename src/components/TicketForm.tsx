@@ -99,9 +99,15 @@ const TicketForm: React.FC<TicketFormProps> = ({ onAdd }) => {
           <option value="concluído">Concluído</option>
         </select>
       </div>
-      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-        Criar Ticket
-      </button>
+<button
+  type="submit"
+  className="bg-blue-600 text-white px-4 py-2 rounded transform hover:bg-blue-700 hover:scale-105 transition-all duration-200"
+>
+  Criar Ticket
+</button>
+
+
+
       </div>
     </form>
   );
