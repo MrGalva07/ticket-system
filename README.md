@@ -1,54 +1,105 @@
-# React + TypeScript + Vite
+🎟️ Sistema de Gerenciamento de Tickets
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Um sistema completo para gerenciamento de tickets com status (Aberto/Em Progresso/Concluído), desenvolvido com React, TypeScript e Tailwind CSS.
 
-Currently, two official plugins are available:
+🚀 Funcionalidades Principais
+CRUD Completo de tickets
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Filtragem inteligente por status
 
-## Expanding the ESLint configuration
+Interface responsiva que se adapta a dispositivos móveis e desktop
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Modal de confirmação para ações importantes
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Persistência local dos dados
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Atualização em tempo real do status
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+🛠 Tecnologias Utilizadas
+Frontend:
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+React 18
+
+TypeScript
+
+Vite
+
+Tailwind CSS
+
+React Icons
+
+Ferramentas:
+
+ESLint
+
+Prettier
+
+Git
+
+📦 Como Executar Localmente
+Pré-requisitos
+Node.js (v18 ou superior)
+
+npm (v9 ou superior) ou yarn
+
+Instalação
+# Clone o repositório
+git clone https://github.com/MrGalva07/ticket-system.git
+
+# Acesse o diretório
+cd ticket-system
+
+# Instale as dependências
+npm install
+# ou
+yarn install
+
+# Ambiente de desenvolvimento
+npm run dev
+# ou
+yarn dev
+
+# Build para produção
+npm run build
+# ou
+yarn build
+
+🎨 Estrutura do Projeto
+
+src/
+├── components/
+│   ├── TicketCard.tsx       # Componente de card individual
+│   ├── TicketCardList.tsx   # Listagem de tickets (mobile)
+│   ├── TicketTable.tsx      # Tabela de tickets (desktop)
+│   ├── ConfirmationModal.tsx # Modal de confirmação
+│   └── ...
+├── types/
+│   └── ticket.ts            # Tipos TypeScript
+├── App.tsx                  # Componente principal
+└── main.tsx                 # Ponto de entrada
+
+
+📝 Guia de Uso
+Adicionar Ticket:
+
+Clique em "Criar Novo Ticket"
+
+Preencha os campos obrigatórios
+
+Confirme para adicionar
+
+Atualizar Status:
+
+Selecione novo status no dropdown
+
+O sistema atualiza automaticamente
+
+Visualizar Detalhes:
+
+Clique no título do ticket
+
+Excluir Ticket:
+
+Clique em "Excluir"
+
+Confirme no modal de confirmação
