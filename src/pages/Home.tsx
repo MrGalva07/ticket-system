@@ -2,8 +2,8 @@ import { useState } from 'react';
 import type { Ticket } from '../types/ticket';
 import TicketTable from '../components/TicketTable';
 import TicketModal from '../components/TicketModal';
-import TicketCardList from '../components/TicketCardList'; // novo
 import { v4 as uuidv4 } from 'uuid';
+import { TicketCardList } from '../components/TicketCardList';
 
 const Home = () => {
   const [tickets, setTickets] = useState<Ticket[]>([
@@ -144,12 +144,12 @@ const Home = () => {
       {/* Filtro e botão responsivo */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
         {!isFormVisible && (
-         <button
-  onClick={() => setIsFormVisible(true)}
-  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm transition-colors duration-200"
->
-  Criar Novo Ticket
-</button>
+          <button
+            onClick={() => setIsFormVisible(true)}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm transition-colors duration-200"
+          >
+            Criar Novo Ticket
+          </button>
         )}
         <div>
           <label htmlFor="filtroStatus" className="mr-2 font-semibold">Filtrar por status:</label>
@@ -202,13 +202,13 @@ const Home = () => {
             />
           </div>
           <div className="flex gap-2 mt-4">
-            <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">
+            <button type="submit" className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded">
               {isEditing ? 'Salvar Edição' : 'Adicionar'}
             </button>
             <button
               type="button"
               onClick={() => { setIsFormVisible(false); setIsEditing(false); }}
-              className="px-4 py-2 bg-red-600 text-white rounded"
+              className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded"
             >
               Cancelar
             </button>
@@ -232,6 +232,7 @@ const Home = () => {
           setTickets={setTickets}
           onChangeStatus={handleChangeStatus}
           onTicketClick={handleTicketClick}
+          onDelete={handleDeleteTicket} 
         />
       </div>
 
@@ -243,8 +244,6 @@ const Home = () => {
           onAddComment={handleAddComment}
         />
       )}
-
-      
     </div>
   );
 };
