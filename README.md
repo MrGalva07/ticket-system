@@ -2,6 +2,10 @@
 
 Um sistema completo para gerenciamento de tickets com status (Aberto/Em Progresso/Concluído), desenvolvido com React, TypeScript e Tailwind CSS.
 
+✨ Deploy
+O sistema está disponível em produção através da Vercel:
+https://ticket-system-drab.vercel.app
+
 🚀 Funcionalidades Principais
 CRUD Completo de tickets
 
